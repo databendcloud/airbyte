@@ -32,6 +32,7 @@ DESTINATION_SIZE_LIMITS = {
     # According to the DuckDB team there no restriction: We don't enforce a maximum right now but I would not recommend having column names
     # longer than a few kilobytes. https://discord.com/channels/909674491309850675/1067042662827438122/1067043835768737893.
     DestinationType.DUCKDB.value: 64,
+    DestinationType.DATABEND.value: 255,
 }
 
 # DBT also needs to generate suffix to table names, so we need to make sure it has enough characters to do so...
@@ -249,6 +250,9 @@ class DestinationNameTransformer:
         elif self.destination_type.value == DestinationType.DUCKDB.value:
             if not is_quoted and not self.needs_quotes(input_name):
                 result = input_name.lower()
+        elif self.destination_type.value == DestinationType.DATABEND.value:
+            if not is_quoted and not self.needs_quotes(input_name):
+                result = input_name.lower()
         else:
             raise KeyError(f"Unknown destination type {self.destination_type}")
         return result
@@ -291,6 +295,8 @@ class DestinationNameTransformer:
             result = input_name.lower()
         elif self.destination_type.value == DestinationType.DUCKDB.value:
             result = input_name.lower()
+        elif self.destination_type.value == DestinationType.DATABEND.value:
+            pass
         else:
             raise KeyError(f"Unknown destination type {self.destination_type}")
         return result

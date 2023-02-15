@@ -48,6 +48,10 @@
     json
 {%- endmacro -%}
 
+{%- macro databend__type_json() -%}
+    json
+{%- endmacro -%}
+
 {# string ------------------------------------------------- #}
 
 {%- macro mysql__type_string() -%}
@@ -75,6 +79,11 @@
     char(1000)
 {%- endmacro -%}
 
+{%- macro databend__type_string() -%}
+    String
+{%- endmacro -%}
+
+
 {%- macro duckdb__type_string() -%}
     VARCHAR
 {%- endmacro -%}
@@ -93,6 +102,10 @@
 {% endmacro %}
 
 {% macro tidb__type_float() %}
+    float
+{% endmacro %}
+
+{% macro databend__type_float() %}
     float
 {% endmacro %}
 
@@ -121,6 +134,10 @@
     signed
 {% endmacro %}
 
+{% macro databend__type_int() %}
+    INT
+{% endmacro %}
+
 {% macro duckdb__type_int() %}
     INTEGER
 {% endmacro %}
@@ -142,6 +159,10 @@
     signed
 {% endmacro %}
 
+{% macro databend__type_bigint() %}
+    BIGINT
+{% endmacro %}
+
 {% macro duckdb__type_bigint() %}
     BIGINT
 {% endmacro %}
@@ -157,6 +178,10 @@
 
 {% macro tidb__type_numeric() %}
     float
+{% endmacro %}
+
+{% macro databend__type_numeric() %}
+    DOUBLE
 {% endmacro %}
 
 {% macro duckdb__type_numeric() %}
@@ -193,6 +218,10 @@ so this macro needs to be called very_large_integer.
     decimal(38, 0)
 {% endmacro %}
 
+{% macro databend__type_very_large_integer() %}
+    numeric
+{% endmacro %}
+
 {% macro duckdb__type_very_large_integer() %}
     DECIMAL(38, 0)
 {% endmacro %}
@@ -214,6 +243,10 @@ so this macro needs to be called very_large_integer.
 
 {% macro tidb__type_timestamp() %}
     time
+{% endmacro %}
+
+{% macro databend__type_timestamp() %}
+    timestamp
 {% endmacro %}
 
 {% macro duckdb__type_timestamp() %}
@@ -326,6 +359,10 @@ so this macro needs to be called very_large_integer.
     time
 {% endmacro %}
 
+{% macro databend__type_time_with_timezone() %}
+    String
+{% endmacro %}
+
 {% macro duckdb__type_time_without_timezone() %}
     TIMESTAMP 
 {% endmacro %}
@@ -372,6 +409,10 @@ so this macro needs to be called very_large_integer.
     char(1000)
 {%- endmacro -%}
 
+{% macro databend__type_time_with_timezone() %}
+    TIMEZONE
+{% endmacro %}
+
 {%- macro duckdb__type_time_with_timezone() -%}
     TIMESTAMPTZ
 {%- endmacro -%}
@@ -395,4 +436,8 @@ so this macro needs to be called very_large_integer.
 
 {% macro clickhouse__type_date() %}
     Date32
+{% endmacro %}
+
+{% macro databend__type_date() %}
+    DATE
 {% endmacro %}

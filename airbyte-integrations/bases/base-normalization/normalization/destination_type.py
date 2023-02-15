@@ -17,6 +17,7 @@ class DestinationType(Enum):
     SNOWFLAKE = "snowflake"
     TIDB = "tidb"
     DUCKDB = "duckdb"
+    DATABEND = "databend"
 
     @classmethod
     def from_string(cls, string_value: str) -> "DestinationType":

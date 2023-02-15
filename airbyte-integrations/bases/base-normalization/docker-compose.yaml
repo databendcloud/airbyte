@@ -20,3 +20,5 @@ services:
     image: airbyte/normalization-tidb:${VERSION}
   normalization-duckdb:
     image: airbyte/normalization-duckdb:${VERSION}
+  normalization-databend:
+    image: airbyte/normalization-databend:${VERSION}

@@ -8,6 +8,7 @@
     - ClickHouse: JSONExtractString(json_doc, 'path' [, 'path'] ...) -> https://clickhouse.com/docs/en/sql-reference/functions/json-functions/
     - TiDB: JSON_EXTRACT(json_doc, 'path' [, 'path'] ...) -> https://docs.pingcap.com/tidb/stable/json-functions
     - DuckDB: json_extract(json, 'path') note: If path is a LIST, the result will be a LIST of JSON -> https://duckdb.org/docs/extensions/json
+    - Databend: json_extract_path_text( <expr>, <path_name> ) -> https://databend.rs/doc/sql-functions/semi-structured-functions/json_extract_path_text
 #}
 
 {# format_json_path --------------------------------------------------     #}
@@ -104,6 +105,14 @@
     {{ "'$.\"" ~ json_path_list|join(".") ~ "\"'" }}
 {%- endmacro %}
 
+{% macro databend__format_json_path(json_path_list) -%}
+    {%- set str_list = [] -%}
+    {%- for json_path in json_path_list -%}
+        {%- if str_list.append(json_path.replace("'", "''").replace('"', '""')) -%} {%- endif -%}
+    {%- endfor -%}
+    {{ "'\"" ~ str_list|join('"."') ~ "\"'" }}
+{%- endmacro %}
+
 {% macro duckdb__format_json_path(json_path_list) -%}
     {# -- '$."x"."y"."z"' #}
     {{ "'$.\"" ~ json_path_list|join(".") ~ "\"'" }}
@@ -186,6 +195,14 @@
     {% endif -%}
 {%- endmacro %}
 
+{% macro databend__json_extract(from_table, json_column, json_path_list, normalized_json_path) -%}
+    {%- if from_table|string() == '' %}
+        get_path(parse_json({{ json_column }}), {{ format_json_path(json_path_list) }})
+    {% else %}
+        get_path(parse_json({{ from_table }}.{{ json_column }}), {{ format_json_path(json_path_list) }})
+    {% endif -%}
+{%- endmacro %}
+
 {% macro duckdb__json_extract(from_table, json_column, json_path_list, normalized_json_path) -%}
     {%- if from_table|string() == '' %}
         json_extract({{ json_column }}, {{ format_json_path(normalized_json_path) }})
@@ -248,6 +265,10 @@
     )
 {%- endmacro %}
 
+{% macro databend__json_extract_scalar(json_column, json_path_list, normalized_json_path) -%}
+    to_varchar(get_path(parse_json({{ json_column }}), {{ format_json_path(json_path_list) }}))
+{%- endmacro %}
+
 {% macro duckdb__json_extract_scalar(json_column, json_path_list, normalized_json_path) -%}
     json_extract_string({{ json_column }}, {{ format_json_path(json_path_list) }})
 {%- endmacro %}
@@ -300,6 +321,10 @@
 
 {% macro tidb__json_extract_array(json_column, json_path_list, normalized_json_path) -%}
     json_extract({{ json_column }}, {{ format_json_path(normalized_json_path) }})
+{%- endmacro %}
+
+{% macro databend__json_extract_array(json_column, json_path_list, normalized_json_path) -%}
+    get_path(parse_json({{ json_column }}), {{ format_json_path(json_path_list) }})
 {%- endmacro %}
 
 {% macro duckdb__json_extract_array(json_column, json_path_list, normalized_json_path) -%}
