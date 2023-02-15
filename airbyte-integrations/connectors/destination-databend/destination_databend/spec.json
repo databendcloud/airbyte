@@ -4,6 +4,8 @@
     "overwrite",
     "append"
   ],
+  "supportsNormalization": true,
+  "supportsDBT": true,
   "supportsIncremental" : true,
   "connectionSpecification" : {
     "$schema" : "http://json-schema.org/draft-07/schema#",
@@ -21,6 +23,16 @@
         "description" : "Hostname of the database.",
         "type" : "string",
         "order" : 0
+      },
+      "protocol" : {
+        "title" : "Protocol",
+        "description" : "Protocol of the host.",
+        "type" : "string",
+        "examples" : [
+          "https"
+        ],
+        "default" : "https",
+        "order" : 1
       },
       "port" : {
         "title" : "Port",
