@@ -432,7 +432,7 @@
   releaseStage: alpha
   normalizationConfig:
     normalizationRepository: cloud001/normalization-databend
-    normalizationTag: 0.2.25
+    normalizationTag: 0.0.1
     normalizationIntegrationType: databend
   supportsDbt: true
 - name: Teradata Vantage
